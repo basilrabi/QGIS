@@ -2242,52 +2242,40 @@ QDomElement QgsOgcUtilsExprToFilter::expressionBinaryOperatorToOgcFilter( const 
 {
   QgsExpressionNodeBinaryOperator::BinaryOperator op = node->op();
 
-  // 1) Special handling for concatenation operator (||)
+  // Special handling for concatenation operator (||)
   if ( op == QgsExpressionNodeBinaryOperator::boConcat )
   {
     QDomElement funcElem = mDoc.createElement( mFilterPrefix + u":Function"_s );
     funcElem.setAttribute( u"name"_s, u"Concatenate"_s );
 
-    bool ok = true;
-    std::function<void( const QgsExpressionNode * )> appendParts = [&]( const QgsExpressionNode * n )
-    {
-      if ( !ok )
-        return;
-
+    std::function<bool( const QgsExpressionNode * )> appendParts = [&]( const QgsExpressionNode *n ) -> bool {
       if ( n->nodeType() == QgsExpressionNode::ntBinaryOperator )
       {
-        const QgsExpressionNodeBinaryOperator *binNode = static_cast<const QgsExpressionNodeBinaryOperator *>( n );
+        const auto *binNode = static_cast<const QgsExpressionNodeBinaryOperator *>( n );
         if ( binNode->op() == QgsExpressionNodeBinaryOperator::boConcat )
         {
-          appendParts( binNode->opLeft() );
-          appendParts( binNode->opRight() );
-          return;
+          return appendParts( binNode->opLeft() ) && appendParts( binNode->opRight() );
         }
       }
 
       // Try to convert the expression node to an OGC filter element
       QDomElement subElem = expressionNodeToOgcFilter( n, expression, context );
-      
-      if ( !subElem.isNull() )
+
+      if ( subElem.isNull() )
       {
-        funcElem.appendChild( subElem );
+        return false;
       }
-      else
-      {
-        // If any part of the concatenation cannot be converted,
-        // we should mark the entire operation as unsuccessful.
-        ok = false;
-      }
+      funcElem.appendChild( subElem );
+      return true;
     };
 
-    appendParts( node );
-
-    if ( !ok )
+    if ( !appendParts( node ) )
+    {
       return QDomElement(); // Return empty element if any part of the concatenation could not be converted
-
+    }
     return funcElem;
   }
-  // 2) Handle other binary operators
+  // Handle other binary operators
   const QDomElement leftElem = expressionNodeToOgcFilter( node->opLeft(), expression, context );
   if ( !mErrorMessage.isEmpty() )
     return QDomElement();

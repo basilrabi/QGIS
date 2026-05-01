@@ -16,6 +16,7 @@
 #include "qgscategorizedsymbolrenderer.h"
 #include "qgsembeddedsymbolrenderer.h"
 #include "qgsfillsymbol.h"
+#include "qgsfontutils.h"
 #include "qgsgeometry.h"
 #include "qgsgraduatedsymbolrenderer.h"
 #include "qgsmarkersymbol.h"
@@ -1426,30 +1427,61 @@ class TestQgsRuleBasedRenderer : public QgsTest
 
     void testLabelingConcatenationSld()
     {
-      // 1) Create a layer
+      // Create a layer
       auto layer = std::make_unique< QgsVectorLayer >( u"Point?field=name:string&field=status:string"_s, u"test"_s, u"memory"_s );
 
-      // 2) Set labeling with a concatenation expression
+      // Set labeling with a concatenation expression
       QgsPalLayerSettings settings;
       settings.isExpression = true;
       settings.fieldName = u"name || ' - ' || status"_s;
+
+      QgsTextFormat format;
+      format.setFont( QgsFontUtils::getStandardTestFont( u"Bold"_s ).family() );
+      format.setSizeUnit( Qgis::RenderUnit::Pixels );
+      format.setSize( 10 );
+      format.setColor( QColor( 0, 0, 0 ) );
+      format.buffer().setEnabled( false );
+      format.shadow().setEnabled( false );
+      settings.setFormat( format );
+
       layer->setLabeling( new QgsVectorLayerSimpleLabeling( settings ) );
       layer->setLabelsEnabled( true );
 
-      // 3) Export to SLD
+      // Set a simple marker symbol for the layer
+      auto *markerLayer = new QgsSimpleMarkerSymbolLayer();
+      markerLayer->setColor( QColor( 255, 0, 0 ) );
+      markerLayer->setStrokeColor( QColor( 0, 0, 0 ) );
+      markerLayer->setStrokeWidthUnit( Qgis::RenderUnit::Pixels );
+      markerLayer->setStrokeWidth( 0.5 );
+      markerLayer->setSizeUnit( Qgis::RenderUnit::Pixels );
+      markerLayer->setSize( 5 );
+
+      QgsSymbolLayerList layers;
+      layers.append( markerLayer );
+
+      auto symbol = std::make_unique< QgsMarkerSymbol >( layers );
+
+      auto *singleRule = new QgsRuleBasedRenderer::Rule( symbol.release() );
+      singleRule->setLabel( u"Single symbol"_s );
+      QgsRuleBasedRenderer::Rule *rootRule = new QgsRuleBasedRenderer::Rule( nullptr );
+      rootRule->appendChild( singleRule );
+      layer->setRenderer( new QgsRuleBasedRenderer( rootRule ) );
+
+      // Export to SLD
       QgsSldExportContext context;
       QDomDocument doc = layer->exportSldStyleV3( context );
 
-      QString sld = doc.toString();
+      QString sld = doc.toString( 2 );
 
-      // 4) Verify that the concatenation is correctly represented in the SLD as a Function with the correct arguments
-      QVERIFY2( sld.contains( u"<ogc:Function name=\"Concatenate\">"_s ), sld.toUtf8().constData() );
-      QVERIFY2( sld.contains( u"<ogc:PropertyName>name</ogc:PropertyName>"_s ), sld.toUtf8().constData() );
-      QVERIFY2( sld.contains( u"<ogc:Literal> - </ogc:Literal>"_s ), sld.toUtf8().constData() );
-      QVERIFY2( sld.contains( u"<ogc:PropertyName>status</ogc:PropertyName>"_s ), sld.toUtf8().constData() );
+      // Load the expected SLD from an external file
+      const QString expectedSldPath = TEST_DATA_DIR + u"/rulebasedrenderer_expected_concatenation.sld"_s;
+      QFile file( expectedSldPath );
+      QVERIFY2( file.open( QIODevice::ReadOnly | QIODevice::Text ), "Failed to open the expected SLD file" );
 
-      // Verify that it is "flat" (only one Concatenate)
-      QCOMPARE( sld.count( u"name=\"Concatenate\""_s ), 1 );
+      QString expectedSld = QString::fromUtf8( file.readAll() );
+      file.close();
+
+      QCOMPARE( sld.trimmed(), expectedSld.trimmed() );
     }
 
   private:
