@@ -494,6 +494,7 @@ void QgsMapToolEditBlankSegmentsBase::selectFeature( QgsMapMouseEvent *event )
     // update property override button from new property
     QgsPropertyCollection c = mSymbolLayer->dataDefinedProperties();
     QgsProperty property = c.property( static_cast<int>( QgsSymbolLayer::Property::BlankSegments ) );
+    mPropertyButton->updateFieldLists();
     mPropertyButton->setToProperty( property );
   }
 
