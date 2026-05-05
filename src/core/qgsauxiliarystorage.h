@@ -243,8 +243,9 @@ class CORE_EXPORT QgsAuxiliaryLayer : public QgsVectorLayer
      * Creates if necessary a new auxiliary field for a symbol layer 's property and
      * activates this property in settings.
      *
-     * \param property The property to create
-     * \param vlayer The vector layer
+     * \param propertyKey The property to create
+     * \param layer The vector layer
+     * \param symbolLayer the symbol layer to create the property on
      * \param overwriteExisting controls whether an existing property should be completely overwritten or upgraded to a coalesce("new aux field", 'existing' || 'property' || 'expression') type property
      *
      * \returns The index of the auxiliary field or -1
