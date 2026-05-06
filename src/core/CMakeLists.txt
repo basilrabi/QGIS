@@ -2072,6 +2072,7 @@ set(QGIS_CORE_HDRS
   symbology/qgsarrowsymbollayer.h
 
   symbology/qgscategorizedsymbolrenderer.h
+  symbology/qgscategorizedsymbolutils.h
   symbology/qgscolorbrewerpalette.h
   symbology/qgscombinedstylemodel.h
   symbology/qgscptcityarchive.h
