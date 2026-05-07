@@ -304,7 +304,6 @@ class GUI_EXPORT QgsMapTool : public QObject
 
     /**
      * Returns data defined property column index for the \a propertyKey from \a properties associated to the \a layer
-     * \param status is updated with current property status
      */
     int dataDefinedColumnIndex( int propertyKey, const QgsPropertyCollection &properties, const QgsVectorLayer *vlayer ) const;
 

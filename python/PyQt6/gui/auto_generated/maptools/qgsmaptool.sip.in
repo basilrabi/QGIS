@@ -307,8 +307,6 @@ Returns data defined property column name for the ``propertyKey`` from
 %Docstring
 Returns data defined property column index for the ``propertyKey`` from
 ``properties`` associated to the ``layer``
-
-:param status: is updated with current property status
 %End
 
 

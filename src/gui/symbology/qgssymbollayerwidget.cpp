@@ -2496,7 +2496,7 @@ void QgsTemplatedLineSymbolLayerWidget::updatePerFeatureCustomizationWidget()
   const QString info = u"</b><br/>"_s
                        + tr(
                            "First click to select the line you want to operate on. "
-                           "<br/>Press %1 to unselect the line and select another one."
+                           "<br/>Press %1 to deselect the line and select another one."
                        )
                            .arg( QKeySequence( QKeySequence::StandardKey::Cancel ).toString( QKeySequence::NativeText ) );
   tooltipEditBlankSegment += info;
