@@ -309,6 +309,7 @@ void TestQgsMapToolEditBlankSegments::testAuxiliaryStorageAutoCreation()
   c.setProperty( propertyKey, expressionProperty );
   mSymbolLayer->setDataDefinedProperties( c );
   mPropertyButton->setToProperty( expressionProperty );
+  emit mPropertyButton->changed(); // setToProperty doesn't fire the changed signal
 
   QCOMPARE( mMapToolEditBlankSegments->mBlankSegmentsFieldIndex, -1 );
   QCOMPARE( nbRubberBandVisible(), 0 );

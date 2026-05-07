@@ -201,6 +201,7 @@ void QgsMapToolExtraItemBase::selectFeature( QgsMapMouseEvent *event )
     QgsProperty property = c.property( static_cast<int>( QgsSymbolLayer::Property::ExtraItems ) );
     mPropertyButton->updateFieldLists();
     mPropertyButton->setToProperty( property );
+    emit mPropertyButton->changed(); // setToProperty doesn't fire the changed signal
   }
 
   // start editing

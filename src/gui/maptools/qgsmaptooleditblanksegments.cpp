@@ -496,7 +496,7 @@ void QgsMapToolEditBlankSegmentsBase::selectFeature( QgsMapMouseEvent *event )
     QgsProperty property = c.property( static_cast<int>( QgsSymbolLayer::Property::BlankSegments ) );
     mPropertyButton->updateFieldLists();
     mPropertyButton->setToProperty( property );
-    emit mPropertyButton->changed();
+    emit mPropertyButton->changed(); // setToProperty doesn't fire the changed signal
   }
 
   // start editing

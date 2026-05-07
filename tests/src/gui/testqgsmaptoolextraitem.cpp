@@ -357,6 +357,7 @@ void TestQgsMapToolExtraItem::testAuxiliaryStorageAutoCreation()
   c.setProperty( propertyKey, expressionProperty );
   mSymbolLayer->setDataDefinedProperties( c );
   mPropertyButton->setToProperty( expressionProperty );
+  emit mPropertyButton->changed(); // setToProperty doesn't fire the changed signal
 
   QCOMPARE( mMapToolAddExtraItems->mExtraItemsFieldIndex, -1 );
   QCOMPARE( nbRubberBandVisible(), 0 );
