@@ -298,7 +298,7 @@ class GUI_EXPORT QgsMapTool : public QObject
 
     /**
      * Returns data defined property column name for the \a propertyKey from \a properties associated to the \a layer
-     * \param status is updated with current property status
+     * \a status is updated with current property status
      */
     QString dataDefinedColumnName( int propertyKey, const QgsPropertyCollection &properties, const QgsVectorLayer *layer, PropertyStatus &status ) const;
 

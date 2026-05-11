@@ -298,9 +298,8 @@ Transforms a ``point`` from screen coordinates to map coordinates.
     QString dataDefinedColumnName( int propertyKey, const QgsPropertyCollection &properties, const QgsVectorLayer *layer, PropertyStatus &status ) const;
 %Docstring
 Returns data defined property column name for the ``propertyKey`` from
-``properties`` associated to the ``layer``
-
-:param status: is updated with current property status
+``properties`` associated to the ``layer`` ``status`` is updated with
+current property status
 %End
 
     int dataDefinedColumnIndex( int propertyKey, const QgsPropertyCollection &properties, const QgsVectorLayer *vlayer ) const;
