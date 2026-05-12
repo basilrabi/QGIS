@@ -52,6 +52,7 @@ email                : sherman at mrcc.com
 #include "qgsmapthemecollection.h"
 #include "qgsmaptoolpan.h"
 #include "qgsmaptopixel.h"
+#include "qgsmessagebar.h"
 #include "qgsmessagelog.h"
 #include "qgsmimedatautils.h"
 #include "qgsoverlaywidgetlayout.h"
@@ -73,6 +74,7 @@ email                : sherman at mrcc.com
 #include "qgssymbollayerutils.h"
 #include "qgstemporalcontroller.h"
 #include "qgstemporalnavigationobject.h"
+#include "qgsuserinputwidget.h"
 #include "qgsvectorlayer.h"
 #include "qgsvectortilelayer.h"
 
@@ -1062,6 +1064,26 @@ QgsStatusBar *QgsMapCanvas::statusBar()
 void QgsMapCanvas::setStatusBar( QgsStatusBar *bar )
 {
   mStatusBar = bar;
+}
+
+void QgsMapCanvas::setMessageBar( QgsMessageBar *bar )
+{
+  mMessageBar = bar;
+}
+
+QgsMessageBar *QgsMapCanvas::messageBar()
+{
+  return mMessageBar.data();
+}
+
+void QgsMapCanvas::setUserInputWidget( QgsUserInputWidget *userInputWidget )
+{
+  mUserInputWidget = userInputWidget;
+}
+
+QgsUserInputWidget *QgsMapCanvas::userInputWidget()
+{
+  return mUserInputWidget.data();
 }
 
 bool QgsMapCanvas::previewJobsEnabled() const
