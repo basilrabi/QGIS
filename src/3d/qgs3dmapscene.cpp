@@ -1146,16 +1146,15 @@ void Qgs3DMapScene::updateSceneState()
 
 void Qgs3DMapScene::onBackgroundSettingsChanged()
 {
+  if ( mBackgroundEntity )
+  {
+    mBackgroundEntity->deleteLater();
+    mBackgroundEntity = nullptr;
+  }
+
   const QgsAbstract3DMapBackgroundSettings *settings = mMap.backgroundSettings();
   if ( !settings )
-  {
-    if ( mBackgroundEntity )
-    {
-      mBackgroundEntity->deleteLater();
-      mBackgroundEntity = nullptr;
-    }
     return;
-  }
 
   QgsFrameGraph *frameGraph = mEngine->frameGraph();
 
