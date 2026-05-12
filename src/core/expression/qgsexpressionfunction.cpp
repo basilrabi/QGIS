@@ -1509,6 +1509,7 @@ static QVariant fcnGetTimeZone( const QVariantList &values, const QgsExpressionC
   }
   return QVariant();
 #else
+  Q_UNUSED( values )
   parent->setEvalErrorString( QObject::tr( "Qt is built without Qt timezone support, cannot use fcnGetTimeZone" ) );
   return QVariant();
 #endif
@@ -1526,6 +1527,7 @@ static QVariant fcnSetTimeZone( const QVariantList &values, const QgsExpressionC
   }
   return QVariant();
 #else
+  Q_UNUSED( values )
   parent->setEvalErrorString( QObject::tr( "Qt is built without Qt timezone support, cannot use fcnSetTimeZone" ) );
   return QVariant();
 #endif
@@ -1542,6 +1544,7 @@ static QVariant fcnConvertTimeZone( const QVariantList &values, const QgsExpress
   }
   return QVariant();
 #else
+  Q_UNUSED( values )
   parent->setEvalErrorString( QObject::tr( "Qt is built without Qt timezone support, cannot use fcnConvertTimeZone" ) );
   return QVariant();
 #endif
@@ -1557,6 +1560,7 @@ static QVariant fcnTimeZoneToId( const QVariantList &values, const QgsExpression
   }
   return QVariant();
 #else
+  Q_UNUSED( values )
   parent->setEvalErrorString( QObject::tr( "Qt is built without Qt timezone support, cannot use fcnTimeZoneToId" ) );
   return QVariant();
 #endif
